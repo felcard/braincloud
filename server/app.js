@@ -1,32 +1,21 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const socketIo = require('socket.io');
 const cors = require('cors');
+const { Word, User } = require('./db/schemas');
+require('./db/connection');
+const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
+
 require('dotenv').config({
-    path: `${__dirname}/prod.env`
+    path: `${__dirname}/auth.env`
 });
-if (!process.env.ATLAS_URI) {
-    throw new Error('ATLAS_URI not set');
-}
-
-const mongoPath = process.env.ATLAS_URI;
-// Connect to MongoDB database
-mongoose.connect(mongoPath, {
-    useNewUrlParser: true, useUnifiedTopology: true,
-});
-
-// Define Word model(mongoDB schema)
-const Word = mongoose.model('word', {
-    text: { type: String },
-    count: { type: Number, default: 0 }
-});
-//mongoose.connection.syncIndexes();
 
 // Create Express app and Socket.IO server
 const app = express();
 app.use(cors());
-const server = app.listen(3001, () => {
-    console.log('Server listening on port 3000');
+const { PORT = 3001 } = process.env;
+const server = app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
 });
 //const io = socketIo(server);
 const io = socketIo(server, {
@@ -36,6 +25,44 @@ const io = socketIo(server, {
     //     methods: ["GET", "POST"],
     //     credentials: true //this is for sending cookies and other credentials
     // }
+});
+
+const loginIo = io.of('/login');
+
+loginIo.on('connection', socket => {
+    console.log('client connected to ADMIN login site');
+    // Handle new word submissions from client
+    socket.on('login', async (details) => {
+        const { username } = details;
+        const user = await User.find({ username }).then(res => res[0]);
+        if (!user) {
+            socket.emit('token', 'invalid-user');
+        } else {
+            const valid = await bcrypt.compare(details.password, user.password);
+            if (!valid) {
+                socket.emit('token', 'invalid-password');
+                // return Promise.reject({
+                //     status: 400,
+                //     msg: "invalid password"
+                // });
+            } else {
+                const token = jwt.sign(
+                    {
+                        userId: username,
+                    },
+                    process.env.jwt,
+
+                    { expiresIn: "24h" }
+                );
+                socket.emit('token', token);
+            }
+        }
+
+    });
+    // Handle disconnections
+    socket.on('disconnect', () => {
+        console.log('A client disconnected');
+    });
 });
 
 // Handle Socket.IO connections
