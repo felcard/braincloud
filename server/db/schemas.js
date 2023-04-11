@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 
 const Word = mongoose.model('word', {
-    text: { type: String },
+    text: { type: String, unique: true },
     count: { type: Number, default: 0 }
 });
 
@@ -28,5 +28,11 @@ const User = mongoose.model('user', {
 //     User.insertMany({ username: '<admin-username>', password: hashed });
 // })();
 
+const Code = mongoose.model('code', {
+    id: { type: String, default: "codigo" },
+    session: { type: String },
+    duration: { type: String, default: "1h" }
+});
 
-module.exports = { Word, User };
+
+module.exports = { Word, User, Code };
