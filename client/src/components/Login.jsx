@@ -3,7 +3,7 @@ import io from "socket.io-client";
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
 
-const socket1 = io("http://localhost:3001/login");
+const socketLogin = io("http://localhost:3001/login");
 
 export default function Login() {
   const [userInput, setUserInput] = useState("");
@@ -12,23 +12,24 @@ export default function Login() {
   // Handle new word submission
   const handleSubmit = (event) => {
     event.preventDefault();
-    socket1.emit("login", { username: userInput, password: passInput });
+    socketLogin.emit("login", { username: userInput, password: passInput });
     setUserInput("");
     setPassInput("");
   };
 
   useEffect(() => {
-    socket1.on("token", (token) => {
+    socketLogin.on("token", (token) => {
       if (token === "invalid-user") {
         alert("unauthorised user");
       } else if (token === "invalid-password") {
         alert("invalid password");
       } else {
-        cookies.set("TOKEN", token);
-        socket1.disconnect();
+        const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); //30days cookie
+        cookies.set("TOKEN", token, { expires });
+        socketLogin.disconnect();
       }
     });
-    socket1.on("disconnect", () => {});
+    socketLogin.on("disconnect", () => {});
   }, []);
 
   return (
