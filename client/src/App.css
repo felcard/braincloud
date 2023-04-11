@@ -17,3 +17,15 @@ html {
   height: 100vh;
   background: rgb(221, 238, 158);
 }
+#admin {
+  margin: 0px;
+  width: 100vw;
+  height: 100vh;
+  background: rgb(158, 179, 238);
+}
+#session {
+  margin: 0px;
+  width: 100vw;
+  height: 100vh;
+  background: rgb(207, 161, 200);
+}
