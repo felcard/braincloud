@@ -34,6 +34,9 @@ export default function Admin() {
     socketAdmin.on("msg", (kode) => {
       setCode(kode);
     });
+    return () => {
+      socketAdmin.disconnect();
+    };
   }, []);
 
   return (

@@ -51,8 +51,9 @@ export default function Board() {
     });
     return () => {
       socket.off("initialWords");
+      socket.disconnect();
     };
-  }, []);
+  }, [newWord]);
   return (
     <div>
       <h1>Word List</h1>

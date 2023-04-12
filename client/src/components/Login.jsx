@@ -26,10 +26,12 @@ export default function Login() {
       } else {
         const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); //30days cookie
         cookies.set("TOKEN", token, { expires });
-        socketLogin.disconnect();
       }
     });
-    socketLogin.on("disconnect", () => {});
+    return () => {
+      socketLogin.disconnect();
+    };
+    //socketLogin.on("disconnect", () => {});
   }, []);
 
   return (
