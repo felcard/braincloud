@@ -10,10 +10,10 @@ const socketServer = appServer.listen(PORT, () => {
 });
 //const io = socketIo(server);
 module.exports = socketIo(socketServer, {
-    cors: true//simplified version of below
-    // cors: {
-    //     origin: "http://localhost:3000",
-    //     methods: ["GET", "POST"],
-    //     credentials: true //this is for sending cookies and other credentials
-    // }
+    //cors: true//simplified version of below
+    cors: {
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST"],
+        credentials: true //this is for sending cookies and other credentials
+    }
 });
