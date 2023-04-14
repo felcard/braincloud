@@ -4,7 +4,7 @@ const cors = require('cors');
 
 const appServer = express();
 appServer.use(cors({
-    origin: 'http://localhost:3000'
+    origin: '*'
 }));
 const { PORT = 3001 } = process.env;
 const socketServer = appServer.listen(PORT, () => {
@@ -13,9 +13,5 @@ const socketServer = appServer.listen(PORT, () => {
 //const io = socketIo(server);
 module.exports = socketIo(socketServer, {
     //cors: true//simplified version of below
-    cors: {
-        origin: "*",
-        // methods: ["GET", "POST"],
-        // credentials: true //this is for sending cookies and other credentials
-    }
+    cors: true
 });
