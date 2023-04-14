@@ -1,6 +1,4 @@
-const express = require('express');
-const socketIo = require('socket.io');
-const cors = require('cors');
+const io = require('./listen');
 const { Word, User, Code } = require('./db/schemas');
 require('./db/connection');
 const bcrypt = require('bcrypt');
@@ -8,23 +6,6 @@ const jwt = require("jsonwebtoken");
 
 require('dotenv').config({
     path: `${__dirname}/auth.env`
-});
-
-// Create Express app and Socket.IO server
-const app = express();
-app.use(cors());
-const { PORT = 3001 } = process.env;
-const server = app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
-});
-//const io = socketIo(server);
-const io = socketIo(server, {
-    cors: true//simplified version of below
-    // cors: {
-    //     origin: "http://localhost:3000",
-    //     methods: ["GET", "POST"],
-    //     credentials: true //this is for sending cookies and other credentials
-    // }
 });
 
 const loginIo = io.of('/login');
@@ -36,13 +17,17 @@ adminIo.use(async (socket, next) => {
     if (!token) {
         return next(new Error('Token unavailable'));
     }
-    const decodedToken = await jwt.verify(token, process.env.jwt);
-    console.log(decodedToken, 'adminIo');
-    next();
+    try {
+        const decodedToken = await jwt.verify(token, process.env.jwt);
+        console.log(decodedToken, 'adminIo');
+        next();
+    } catch (err) {
+        return next(new Error("invalid/expired token"));
+    }
 });
 
 adminIo.on('connection', async socket => {
-    console.log('client connected to admin site');
+    console.log('client connected to ADMIN site');
     //on connection we send the current code stored in the db
     const setCode = await Code.find({ id: 'codigo' });
     socket.emit('msg', setCode[0].session);
@@ -53,10 +38,18 @@ adminIo.on('connection', async socket => {
         await Code.insertMany({ session: random, duration: hour });
         socket.emit('msg', random);
     });
+    socket.on('delete', async () => {
+        const deletedFeedback = await Word.deleteMany();
+        socket.emit('delete', deletedFeedback.acknowledged);
+    });
+    // Handle disconnections
+    socket.on('disconnect', () => {
+        console.log('A client disconnected from admin site');
+    });
 });
 
 loginIo.on('connection', socket => {
-    console.log('client connected to login site');
+    console.log('client connected to LOGIN');
     // Handle new word submissions from client
     socket.on('login', async (details) => {
         const { username } = details;
@@ -82,7 +75,7 @@ loginIo.on('connection', socket => {
     });
     // Handle disconnections
     socket.on('disconnect', () => {
-        console.log('A client disconnected');
+        console.log('A client disconnected from login site');
     });
 });
 
@@ -103,7 +96,7 @@ io.use(async (socket, next) => {
 });
 
 sessionIo.on('connection', socket => {
-    console.log('connected to SESSION');
+    console.log('client connected to SESSION');
     socket.on('newCode', async code => {
         const setCode = await Code.find({ id: 'codigo' });
         if (setCode[0].session === code) {
@@ -113,11 +106,15 @@ sessionIo.on('connection', socket => {
             socket.emit('sessionToken', token);
         }
     });
+    // Handle disconnections
+    socket.on('disconnect', () => {
+        console.log('A client disconnected from session site');
+    });
 });
 
 // Handle Socket.IO connections
 io.on('connection', (socket) => {
-    console.log('A new client connected to BOARD');
+    console.log('client connected to BOARD');
     // Send all words to the client on connection
 
     Word.find().then(words => {
@@ -126,9 +123,11 @@ io.on('connection', (socket) => {
     // Handle new word submissions from client
     socket.on('addWord', (text) => {
         console.log(`Adding word: ${text}`);
-        Word.findOneAndUpdate({ text }, { $inc: { count: 1 } }, { upsert: true, new: true }).then(inserted => {
+        Word.findOneAndUpdate({ text }, { $inc: { count: 1 } }, { upsert: true, new: true }).then(async inserted => {
             console.log(inserted);
-            if (inserted.count === 1) io.emit('newWord', inserted);
+            const allWords = await Word.find();
+            socket.emit('initialWords', allWords);
+            //if (inserted.count === 1) io.emit('newWord', inserted);
         });
         // Word.insertMany({ text }).then(inserted => {
         //     io.emit('newWord', inserted);
@@ -136,6 +135,6 @@ io.on('connection', (socket) => {
     });
     // Handle disconnections
     socket.on('disconnect', () => {
-        console.log('A client disconnected');
+        console.log('A client disconnected from BOARD site');
     });
 });
