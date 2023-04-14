@@ -2,6 +2,10 @@ const { Word, User, Code } = require('../db/schemas');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 require('../db/connection');
+const jwt = require("jsonwebtoken");
+require('dotenv').config({
+    path: `${__dirname}/../auth.env`
+});
 
 
 exports.wordsSpace = socket => {
