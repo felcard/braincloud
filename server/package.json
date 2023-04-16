@@ -2,7 +2,7 @@
   "name": "brainstorm-be",
   "version": "1.0.0",
   "description": "",
-  "main": "listen.js",
+  "main": "app.js",
   "scripts": {
     "start": "node listen.js",
     "dev": "nodemon app.js"
