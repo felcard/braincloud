@@ -4,7 +4,7 @@ const cors = require('cors');
 
 const appServer = express();
 appServer.use(cors());
-const { PORT = 3001 } = process.env;
+const { PORT = 8000 } = process.env;
 const socketServer = appServer.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
 });
