@@ -14,10 +14,10 @@ server.listen(PORT, () => {
 
 //const io = socketIo(server);
 module.exports = new Server(server, {
-    cors: {
-        origin: true,
-        allowedHeaders: ['Content-Type', 'Authorization']
-    }
+    // cors: {
+    //     origin: true,
+    //     allowedHeaders: ['Content-Type', 'Authorization']
+    // }
 });
 
 
