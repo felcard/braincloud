@@ -1,6 +1,6 @@
 const io = require('./listen');
 
-const { adminSpace, loginSpace, wordsSpace, sessionLoginSpace } = require('./spaces/admin.space');
+const { adminSpace, loginSpace, wordsSpace, sessionLoginSpace } = require('./spaces/namespaces');
 const { adminAuth, usersAuth } = require('./spaces/middleware');
 
 

@@ -6,6 +6,7 @@ require('dotenv').config({
 ////////////////////ADMIN  MIDDLEWARE//////////////////////if admin does not provide valid token then it needs to /login
 exports.adminAuth = async (socket, next) => {
     const token = socket.handshake.auth.token;
+    console.log(token, 'line 9 middleware');
     if (!token) {
         return next(new Error('Token unavailable'));
     }

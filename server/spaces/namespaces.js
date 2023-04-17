@@ -76,6 +76,7 @@ exports.loginSpace = socket => {
     console.log('client connected to LOGIN');
     // Handle new word submissions from client
     socket.on('login', async (details) => {
+        console.log(details, '78 namespaces');
         const { username } = details;
         const user = await User.find({ username }).then(res => res[0]);
         if (!user) {
