@@ -14,11 +14,17 @@ server.listen(PORT, () => {
 
 //const io = socketIo(server);
 module.exports = new Server(server, {
-    // cors: {
-    //     origin: true,
-    //     allowedHeaders: ['Content-Type', 'Authorization']
+    cors: {
+        origin: "https://beautiful-tarsier-8e762a.netlify.app", credentials: true
+    }
+}
+    //     {
+    //     cors: {
+    //         origin: true,
+    //         allowedHeaders: ['Content-Type', 'Authorization']
+    //     }
     // }
-});
+);
 
 
 
