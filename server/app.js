@@ -1,6 +1,30 @@
-const io = require('./listen');
-
+const express = require('express');
+const http = require('http');
+//const cors = require('cors');
+const { Server } = require('socket.io');
+const app = express();
+const server = http.createServer(app);
+//const io = new Server(server);
 const { wordsSpace } = require('./spaces/namespaces');
+
+
+
+//const io = socketIo(server);
+io = new Server(server, {
+    cors: {
+        origin: "*",
+        allowedHeaders: ["Authorization"], credentials: true
+    }
+}
+    //     {
+    //     cors: {
+    //         origin: true,
+    //         allowedHeaders: ['Content-Type', 'Authorization']
+    //     }
+    // }
+);
+
+
 //const { adminAuth, usersAuth } = require('./spaces/middleware');
 
 
@@ -21,3 +45,8 @@ const { wordsSpace } = require('./spaces/namespaces');
 // loginIo.on('connection', loginSpace);
 // sessionIo.on('connection', sessionLoginSpace);
 io.on('connection', wordsSpace);
+
+const { PORT = 8000 } = process.env;
+server.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
+});
