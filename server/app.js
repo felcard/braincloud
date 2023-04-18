@@ -1,7 +1,7 @@
 const io = require('./listen');
 
 const { wordsSpace } = require('./spaces/namespaces');
-const { adminAuth, usersAuth } = require('./spaces/middleware');
+//const { adminAuth, usersAuth } = require('./spaces/middleware');
 
 
 //////////////////NameSpace declaration//////////////////////
