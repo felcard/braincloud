@@ -1,10 +1,11 @@
 const express = require('express');
-const http = require('http');
-const { Server } = require('socket.io');
-const cors = require('cors');
 const app = express();
-app.use(cors());
+const http = require('http');
 const server = http.createServer(app);
+const { Server } = require('socket.io');
+// const cors = require('cors');
+// app.use(cors());
+
 
 /////////////Mongoose
 // const mongoose = require('mongoose');
@@ -28,7 +29,7 @@ const server = http.createServer(app);
 
 io = new Server(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: "*",
         //allowedHeaders: ["Authorization"], credentials: true
     }
 });
