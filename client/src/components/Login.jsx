@@ -1,13 +1,25 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 import Cookies from "universal-cookie";
-const cookies = new Cookies();
+import link from "./path";
 
-const socketLogin = io("http://localhost:3001/login");
+const cookies = new Cookies();
+const socketLogin = io(link + "login", {
+  transports: ["websocket", "xhr-polling"],
+});
 
 export default function Login() {
+  const navigate = useNavigate();
   const [userInput, setUserInput] = useState("");
   const [passInput, setPassInput] = useState("");
+
+  // useEffect(() => {
+  //   socketLogin.connect();
+  //   return () => {
+  //     socketLogin.disconnect();
+  //   };
+  // }, []);
 
   // Handle new word submission
   const handleSubmit = (event) => {
@@ -16,7 +28,7 @@ export default function Login() {
     setUserInput("");
     setPassInput("");
   };
-
+  //once admin signs in above the details are checked and we get a response accordingly below
   useEffect(() => {
     socketLogin.on("token", (token) => {
       if (token === "invalid-user") {
@@ -24,15 +36,16 @@ export default function Login() {
       } else if (token === "invalid-password") {
         alert("invalid password");
       } else {
-        const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); //30days cookie
+        console.log(token);
+        const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); //30days cookie cookies with no expiration day get eliminated by the browser when the session finishes.
         cookies.set("TOKEN", token, { expires });
+        navigate("/admin");
       }
     });
     return () => {
-      socketLogin.disconnect();
+      socketLogin.off("token");
     };
-    //socketLogin.on("disconnect", () => {});
-  }, []);
+  }, [navigate]);
 
   return (
     <div id="login">

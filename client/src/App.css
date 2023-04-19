@@ -4,12 +4,29 @@
 html {
   margin: 0px;
   padding: 0px;
-  background: rgb(135, 223, 201);
+  background: rgb(172, 56, 164);
+  /* background: rgb(70, 64, 69); */
+}
+input {
+  font-family: "Space Mono";
+  font-size: 1em;
+  font-weight: 400;
+  color: rgb(88, 47, 47);
 }
 #app {
   margin: 0;
   padding: 0;
   text-align: center;
+}
+#board {
+  color: rgb(101, 248, 113);
+}
+#words {
+  max-width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 #login {
   margin: 0px;
@@ -28,4 +45,7 @@ html {
   width: 100vw;
   height: 100vh;
   background: rgb(207, 161, 200);
+}
+input {
+  outline: none;
 }

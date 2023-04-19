@@ -2,14 +2,24 @@ import { useState, useEffect } from "react";
 import io from "socket.io-client";
 import Cookies from "universal-cookie";
 import { useNavigate } from "react-router-dom";
+import link from "./path";
+
 const cookies = new Cookies();
 
-const socketSession = io("http://localhost:3001/session");
+const socketSession = io(link + "session", {
+  transports: ["websocket", "xhr-polling"],
+});
 
 export default function Session() {
   const [newCode, setNewCode] = useState("");
-  const [key, setKey] = useState(false);
   const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   socketSession.connect();
+  //   return () => {
+  //     socketSession.disconnect();
+  //   };
+  // }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -21,21 +31,12 @@ export default function Session() {
     socketSession.on("sessionToken", (token) => {
       const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); //30days cookie expiration
       cookies.set("SESSION-TOKEN", token, { expires });
-      setKey(true);
+      navigate("/");
     });
     return () => {
       socketSession.off("sessionToken");
     };
-  }, []);
-
-  useEffect(() => {
-    if (key) {
-      navigate("/");
-    }
-    return () => {
-      socketSession.disconnect();
-    };
-  }, [key, navigate]);
+  }, [navigate]);
 
   return (
     <div id="session">
