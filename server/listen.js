@@ -1,8 +1,9 @@
 const express = require('express');
 const http = require('http');
-//const cors = require('cors');
+const cors = require('cors');
 const { Server } = require('socket.io');
 const app = express();
+app.use(cors());
 const server = http.createServer(app);
 //const io = new Server(server);
 
@@ -14,7 +15,8 @@ server.listen(PORT, () => {
 //const io = socketIo(server);
 module.exports = new Server(server, {
     cors: {
-        origin: "*",
+        origin: ["https://beautiful-tarsier-8e762a.netlify.app",
+            "http://86.168.156.152:3000"],
         allowedHeaders: ["Authorization"], credentials: true
     }
 }
