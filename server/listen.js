@@ -15,7 +15,7 @@ server.listen(PORT, () => {
 //const io = socketIo(server);
 module.exports = new Server(server, {
     cors: {
-        origin: ["https://beautiful-tarsier-8e762a.netlify.app",
+        origin: ["https://braincloud-fel.koyeb.app/",
             "http://86.168.156.152:3000"],
         allowedHeaders: ["Authorization"], credentials: true
     }
