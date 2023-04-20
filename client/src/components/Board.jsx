@@ -88,7 +88,7 @@ export default function Board() {
         onClick={handleTheme}
         style={{ fontFamily: "Nabla", fontSize: "5em", cursor: "pointer" }}
       >
-        CLOUDSTORM
+        BRAINSTORM
       </h1>
       <form onSubmit={handleSubmit}>
         <input
