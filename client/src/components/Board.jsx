@@ -15,6 +15,7 @@ export default function Board() {
   const [words, setWords] = useState([]);
   const [newWord, setNewWord] = useState("");
   const [light, setLight] = useState(true);
+  const [wordColor, setWordColor] = useState([]);
 
   useEffect(() => {
     const cookie = cookies.get("SESSION-TOKEN");
@@ -25,7 +26,6 @@ export default function Board() {
 
   socket.on("connect_error", (err) => {
     if (err.message) {
-      console.log(err.message);
       navigate("/session");
     }
     //console.log(err.message) log the error message to the console
@@ -61,6 +61,12 @@ export default function Board() {
   useEffect(() => {
     socket.on("initialWords", (words) => {
       setWords(words);
+      const colorArr = [];
+      for (let i = 0; i < words.length; i++) {
+        const randColor = `hsl(${Math.floor(Math.random() * 359)}, 100%, 60%)`;
+        colorArr.push(randColor);
+      }
+      setWordColor(colorArr);
     });
 
     return () => {
@@ -100,10 +106,13 @@ export default function Board() {
         {/* <button type="submit">Add Word</button> */}
       </form>
       <div id="words">
-        {words.map((word) => (
+        {words.map((word, ind) => (
           <div
             key={`${word._id}-${word.count}`}
-            style={{ fontSize: `${1 + 0.6 * word.count}em` }}
+            style={{
+              fontSize: `${1 + 0.6 * word.count}em`,
+              color: `${wordColor[ind]}`,
+            }}
           >
             {word.text}
           </div>
