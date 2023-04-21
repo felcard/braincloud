@@ -15,7 +15,7 @@ export default function Board() {
   const [words, setWords] = useState([]);
   const [newWord, setNewWord] = useState("");
   const [light, setLight] = useState(true);
-  const [wordColor, setWordColor] = useState([]);
+  const [fontColorRotate, setFontColorRotate] = useState([]);
 
   const fonts = () => {
     const fontArr = [
@@ -39,13 +39,17 @@ export default function Board() {
     return () => socket.disconnect();
   }, []);
 
-  socket.on("connect_error", (err) => {
-    if (err.message) {
-      navigate("/session");
-    }
-    //console.log(err.message) log the error message to the console
-    // display the error message to the user using a notification or alert
-  });
+  useEffect(() => {
+    socket.on("connect_error", (err) => {
+      if (err.message) {
+        navigate("/session");
+      }
+      //console.log(err.message) log the error message to the console
+      // display the error message to the user using a notification or alert
+    });
+    return () => socket.off("connect_error");
+  }, [navigate]);
+
   /////////////////////////////////////////////
 
   // Handle new word submission
@@ -76,12 +80,15 @@ export default function Board() {
   useEffect(() => {
     socket.on("initialWords", (words) => {
       setWords(words);
+      //create an array with random values for fontFamily, color and rotation
       const colorArr = [];
       for (let i = 0; i < words.length; i++) {
         const randColor = `hsl(${Math.floor(Math.random() * 359)}, 100%, 60%)`;
-        colorArr.push(randColor);
+        const randRot = Math.floor(Math.random() * 10);
+        const rotate = `rotate(${i % 2 === 0 ? -randRot : randRot}deg)`;
+        colorArr.push([randColor, fonts(), rotate]);
       }
-      setWordColor(colorArr);
+      setFontColorRotate(colorArr);
     });
 
     return () => {
@@ -98,6 +105,8 @@ export default function Board() {
       document.documentElement.style.backgroundColor = "rgb(172, 56, 164)";
     }
   };
+  console.log(document.querySelector("#words")?.offsetWidth);
+  console.log(document.querySelector("#words")?.offsetHeight);
   return (
     <div
       id="board"
@@ -125,9 +134,10 @@ export default function Board() {
           <div
             key={`${word._id}-${word.count}`}
             style={{
-              fontFamily: `${fonts()}`,
+              fontFamily: `${fontColorRotate[ind][1]}`,
               fontSize: `${1 + 0.6 * word.count}em`,
-              color: `${wordColor[ind]}`,
+              color: `${fontColorRotate[ind][0]}`,
+              transform: `${fontColorRotate[ind][2]}`,
             }}
           >
             {word.text}
