@@ -17,6 +17,21 @@ export default function Board() {
   const [light, setLight] = useState(true);
   const [wordColor, setWordColor] = useState([]);
 
+  const fonts = () => {
+    const fontArr = [
+      "Rancho",
+      "Lakki Reddy",
+      "Righteous",
+      "Space Mono",
+      "Rancho",
+      "Lakki Reddy",
+      "Righteous",
+      "Space Mono",
+    ];
+    const fontInd = Math.floor(Math.random() * 7);
+    return fontArr[fontInd];
+  };
+
   useEffect(() => {
     const cookie = cookies.get("SESSION-TOKEN");
     socket.auth = { token: cookie };
@@ -110,6 +125,7 @@ export default function Board() {
           <div
             key={`${word._id}-${word.count}`}
             style={{
+              fontFamily: `${fonts()}`,
               fontSize: `${1 + 0.6 * word.count}em`,
               color: `${wordColor[ind]}`,
             }}
