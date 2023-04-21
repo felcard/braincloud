@@ -1,3 +1,4 @@
+//this file is used to delete the words database when there is no frontend available
 require('./db/connection');
 const mongoose = require('mongoose');
 
