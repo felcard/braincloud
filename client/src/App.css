@@ -7,22 +7,21 @@ html {
   background: rgb(172, 56, 164);
   /* background: rgb(70, 64, 69); */
 }
+h1 {
+  font-size: 3.5vw;
+}
 input {
   font-family: "Space Mono";
   font-size: 1em;
   font-weight: 400;
   color: rgb(88, 47, 47);
+  border-style: none;
+  border: solid rgb(114, 52, 101) 1px;
 }
 #app {
   margin: 0;
   padding: 0;
   text-align: center;
-}
-#board {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: rgb(101, 248, 113);
 }
 
 #login {
@@ -47,11 +46,27 @@ input {
   outline: none;
 }
 
-#words {
-  max-width: 90vw;
+#board {
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: rgb(101, 248, 113);
+}
+#words {
+  display: grid;
+  width: 100vw;
+  grid-template-columns: min-content max-content auto;
+  grid-gap: 10px;
   justify-content: center;
-  flex-wrap: wrap;
+}
+
+@media (orientation: portrait) {
+  h1 {
+    width: 100vw;
+    font-size: 15vw;
+  }
+  #words {
+    display: flex;
+    flex-direction: column;
+  }
 }

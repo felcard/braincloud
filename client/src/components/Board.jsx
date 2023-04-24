@@ -43,7 +43,7 @@ export default function Board() {
     socket.on("connect_error", (err) => {
       if (err.message) {
         navigate("/session");
-      }
+      } //react suggests using navigate() always inside a useEffect
       //console.log(err.message) log the error message to the console
       // display the error message to the user using a notification or alert
     });
@@ -56,6 +56,9 @@ export default function Board() {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (newWord !== "") {
+      console.log(newWord);
+      // const spaceTrimmedWord = newWord.replace(/(\s+)(\S.+\S)(\s+)/, "$2");
+      // console.log(spaceTrimmedWord);
       socket.emit("addWord", newWord);
       setNewWord("");
     }
@@ -105,8 +108,8 @@ export default function Board() {
       document.documentElement.style.backgroundColor = "rgb(172, 56, 164)";
     }
   };
-  console.log(document.querySelector("#words")?.offsetWidth);
-  console.log(document.querySelector("#words")?.offsetHeight);
+  //console.log(document.querySelector("#words")?.offsetWidth);
+  //console.log(document.querySelector("#words")?.offsetHeight);
   return (
     <div
       id="board"
@@ -116,7 +119,7 @@ export default function Board() {
     >
       <h1
         onClick={handleTheme}
-        style={{ fontFamily: "Nabla", fontSize: "5em", cursor: "pointer" }}
+        style={{ fontFamily: "Nabla", cursor: "pointer" }}
       >
         BRAINSTORM
       </h1>
@@ -129,6 +132,7 @@ export default function Board() {
         />
         {/* <button type="submit">Add Word</button> */}
       </form>
+      <br />
       <div id="words">
         {words.map((word, ind) => (
           <div
