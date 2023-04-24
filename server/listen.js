@@ -11,7 +11,7 @@ server.listen(PORT, () => {
 //export socket.io server instance
 module.exports = new Server(server, {
     cors: {
-        origin: "https://braincloud-fel.koyeb.app/",
+        origin: "https://braincloud.netlify.app/",
         //below we allow only auth headers and credentials since we are storing
         //the token as a cookie in the client
         allowedHeaders: "Authorization", credentials: true
