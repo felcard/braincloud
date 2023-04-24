@@ -1,3 +1,6 @@
+
+
+
 const { Word, User, Code } = require('../db/schemas');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
@@ -8,7 +11,7 @@ require('dotenv').config({
 });
 
 
-exports.wordsSpace = (socket, io) => {
+exports.wordsSpace = socket => {
     console.log('client connected to BOARD');
     // Send all words to the client on connection
     Word.find().then(words => {
@@ -23,14 +26,14 @@ exports.wordsSpace = (socket, io) => {
         );
         //after inserting retrieve all words and send back to client
         const allWords = await Word.find();
-        io.emit('initialWords', allWords);
+        socket.emit('initialWords', allWords);
     });
     socket.on('disconnect', () => {
         console.log('A client disconnected from BOARD site');
     });
 };
 
-exports.sessionLoginSpace = (socket) => {
+exports.sessionLoginSpace = socket => {
     console.log('client connected to SESSION');
     socket.on('newCode', async code => {
         const setCode = await Code.find({ id: 'codigo' });
@@ -49,7 +52,7 @@ exports.sessionLoginSpace = (socket) => {
     });
 };
 
-exports.adminSpace = async (socket, io) => {
+exports.adminSpace = async socket => {
     console.log('client connected to ADMIN site');
     //on connection we send the current code stored in the db for the admin to see
     const setCode = await Code.find({ id: 'codigo' });
@@ -67,9 +70,6 @@ exports.adminSpace = async (socket, io) => {
     socket.on('delete', async () => {
         const deletedWords = await Word.deleteMany();
         socket.emit('delete', deletedWords.acknowledged);
-        //send empty array to trigger initialWords on other users to clear
-        //their screens of deleted words
-        io.emit('initialWords', []);
     });
     // Handle disconnections
     socket.on('disconnect', () => {
