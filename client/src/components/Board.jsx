@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 import Cookies from "universal-cookie";
+import Cloud from "./Cloud";
 
 import link from "./path";
 const cookies = new Cookies();
@@ -15,22 +16,23 @@ export default function Board() {
   const [words, setWords] = useState([]);
   const [newWord, setNewWord] = useState("");
   const [light, setLight] = useState(true);
-  const [fontColorRotate, setFontColorRotate] = useState([]);
+  const [flag, setFlag] = useState(true);
+  //const [fontColorRotate, setFontColorRotate] = useState([]);
 
-  const fonts = () => {
-    const fontArr = [
-      "Rancho",
-      "Lakki Reddy",
-      "Righteous",
-      "Space Mono",
-      "Rancho",
-      "Lakki Reddy",
-      "Righteous",
-      "Space Mono",
-    ];
-    const fontInd = Math.floor(Math.random() * 7);
-    return fontArr[fontInd];
-  };
+  // const fonts = () => {
+  //   const fontArr = [
+  //     "Rancho",
+  //     "Lakki Reddy",
+  //     "Righteous",
+  //     "Space Mono",
+  //     "Rancho",
+  //     "Lakki Reddy",
+  //     "Righteous",
+  //     "Space Mono",
+  //   ];
+  //   const fontInd = Math.floor(Math.random() * 7);
+  //   return fontArr[fontInd];
+  // };
 
   useEffect(() => {
     const cookie = cookies.get("SESSION-TOKEN");
@@ -62,6 +64,7 @@ export default function Board() {
       socket.emit("addWord", newWord);
       setNewWord("");
     }
+    setFlag(false);
   };
 
   // Listen for new words from server
@@ -83,21 +86,22 @@ export default function Board() {
   useEffect(() => {
     socket.on("initialWords", (words) => {
       setWords(words);
+      setFlag(true);
       //create an array with random values for fontFamily, color and rotation
-      const colorArr = [];
-      for (let i = 0; i < words.length; i++) {
-        const randColor = `hsl(${Math.floor(Math.random() * 359)}, 100%, 60%)`;
-        const randRot = Math.floor(Math.random() * 10);
-        const rotate = `rotate(${i % 2 === 0 ? -randRot : randRot}deg)`;
-        colorArr.push([randColor, fonts(), rotate]);
-      }
-      setFontColorRotate(colorArr);
+      // const colorArr = [];
+      // for (let i = 0; i < words.length; i++) {
+      //   const randColor = `hsl(${Math.floor(Math.random() * 359)}, 100%, 60%)`;
+      //   const randRot = Math.floor(Math.random() * 10);
+      //   const rotate = `rotate(${i % 2 === 0 ? -randRot : randRot}deg)`;
+      //   colorArr.push([randColor, fonts(), rotate]);
+      // }
+      // setFontColorRotate(colorArr);
     });
 
     return () => {
       socket.off("initialWords");
     };
-  }, []);
+  }, [words]);
 
   const handleTheme = () => {
     if (light) {
@@ -134,7 +138,8 @@ export default function Board() {
       </form>
       <br />
       <div id="words">
-        {words.map((word, ind) => (
+        {flag && <Cloud words={words} />}
+        {/* {words.map((word, ind) => (
           <div
             key={`${word._id}-${word.count}`}
             style={{
@@ -146,7 +151,7 @@ export default function Board() {
           >
             {word.text}
           </div>
-        ))}
+        ))} */}
       </div>
     </div>
   );
