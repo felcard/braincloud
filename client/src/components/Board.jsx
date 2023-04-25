@@ -123,7 +123,7 @@ export default function Board() {
         onClick={handleTheme}
         style={{ fontFamily: "Nabla", cursor: "pointer" }}
       >
-        BRAINSTORM
+        BRAINCLOUD
       </h1>
       <form onSubmit={handleSubmit}>
         <input
