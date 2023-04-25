@@ -33,6 +33,7 @@ const Cloud = ({ words }) => {
         .fontSize((d) => Math.max(d.count * 10, 20))
         .on("end", (words) => {
           const svg = d3.select(svgRef.current);
+          svg.selectAll("*").remove();
           svg
             .attr("width", layout.size()[0])
             .attr("height", layout.size()[1])
@@ -69,6 +70,7 @@ const Cloud = ({ words }) => {
 
   return <svg ref={svgRef} />;
 
+  /////////////////////////////////////alternative/////////////////////////////////
   // const svgRef = useRef(null);
 
   // const fonts = () => {
@@ -85,7 +87,10 @@ const Cloud = ({ words }) => {
   //   const fontInd = Math.floor(Math.random() * 7);
   //   return fontArr[fontInd];
   // };
-  // console.log(words);
+  // words = words.map((word) => {
+  //   word.size = word.count * 10;
+  //   return word;
+  // });
 
   // useEffect(() => {
   //   // const words = [
@@ -230,6 +235,7 @@ const Cloud = ({ words }) => {
   //     <svg ref={svgRef}></svg>
   //   </div>
   // );
+  /////////////////////////////////////////////alternative////////////////////////////////
 };
 
 export default Cloud;

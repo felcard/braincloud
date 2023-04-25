@@ -16,7 +16,6 @@ export default function Board() {
   const [words, setWords] = useState([]);
   const [newWord, setNewWord] = useState("");
   const [light, setLight] = useState(true);
-  const [flag, setFlag] = useState(true);
   //const [fontColorRotate, setFontColorRotate] = useState([]);
 
   // const fonts = () => {
@@ -64,7 +63,6 @@ export default function Board() {
       socket.emit("addWord", newWord);
       setNewWord("");
     }
-    setFlag(false);
   };
 
   // Listen for new words from server
@@ -86,7 +84,7 @@ export default function Board() {
   useEffect(() => {
     socket.on("initialWords", (words) => {
       setWords(words);
-      setFlag(true);
+
       //create an array with random values for fontFamily, color and rotation
       // const colorArr = [];
       // for (let i = 0; i < words.length; i++) {
@@ -138,7 +136,7 @@ export default function Board() {
       </form>
       <br />
       <div id="words">
-        {flag && <Cloud words={words} />}
+        <Cloud words={words} />
         {/* {words.map((word, ind) => (
           <div
             key={`${word._id}-${word.count}`}
