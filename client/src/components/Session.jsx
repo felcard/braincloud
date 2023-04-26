@@ -14,13 +14,6 @@ export default function Session() {
   const [newCode, setNewCode] = useState("");
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   socketSession.connect();
-  //   return () => {
-  //     socketSession.disconnect();
-  //   };
-  // }, []);
-
   const handleSubmit = (event) => {
     event.preventDefault();
     socketSession.emit("newCode", newCode);
@@ -35,6 +28,7 @@ export default function Session() {
     });
     return () => {
       socketSession.off("sessionToken");
+      socketSession.disconnect();
     };
   }, [navigate]);
 

@@ -14,13 +14,6 @@ export default function Login() {
   const [userInput, setUserInput] = useState("");
   const [passInput, setPassInput] = useState("");
 
-  // useEffect(() => {
-  //   socketLogin.connect();
-  //   return () => {
-  //     socketLogin.disconnect();
-  //   };
-  // }, []);
-
   // Handle new word submission
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -44,6 +37,7 @@ export default function Login() {
     });
     return () => {
       socketLogin.off("token");
+      socketLogin.disconnect();
     };
   }, [navigate]);
 

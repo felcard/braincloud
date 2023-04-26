@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 import Cookies from "universal-cookie";
@@ -6,7 +6,7 @@ import Cloud from "./Cloud";
 
 import link from "./path";
 const cookies = new Cookies();
-
+//instantiate socket and config connection via ling and using transport specified
 const socket = io(link, {
   transports: ["websocket", "xhr-polling"],
 });
@@ -15,27 +15,15 @@ export default function Board() {
   const navigate = useNavigate();
   const [words, setWords] = useState([]);
   const [newWord, setNewWord] = useState("");
-  const [light, setLight] = useState(true);
-  //const [fontColorRotate, setFontColorRotate] = useState([]);
-
-  // const fonts = () => {
-  //   const fontArr = [
-  //     "Rancho",
-  //     "Lakki Reddy",
-  //     "Righteous",
-  //     "Space Mono",
-  //     "Rancho",
-  //     "Lakki Reddy",
-  //     "Righteous",
-  //     "Space Mono",
-  //   ];
-  //   const fontInd = Math.floor(Math.random() * 7);
-  //   return fontArr[fontInd];
-  // };
+  const [light, setLight] = useState(false);
+  const headRef = useRef(null);
 
   useEffect(() => {
+    //retrieve cookie on render
     const cookie = cookies.get("SESSION-TOKEN");
+    //set the auth token
     socket.auth = { token: cookie };
+    //start socket connection. although not strictly necessary as seen on the other components that dont need auth the connect() method is not required although in this case we connect after setting the auth token since the auth middleware will not trigger otherwise--further tests required to confirm---
     socket.connect();
     return () => socket.disconnect();
   }, []);
@@ -43,10 +31,10 @@ export default function Board() {
   useEffect(() => {
     socket.on("connect_error", (err) => {
       if (err.message) {
+        console.log(err.message);
         navigate("/session");
       } //react suggests using navigate() always inside a useEffect
       //console.log(err.message) log the error message to the console
-      // display the error message to the user using a notification or alert
     });
     return () => socket.off("connect_error");
   }, [navigate]);
@@ -58,42 +46,15 @@ export default function Board() {
     event.preventDefault();
     if (newWord !== "") {
       console.log(newWord);
-      // const spaceTrimmedWord = newWord.replace(/(\s+)(\S.+\S)(\s+)/, "$2");
-      // console.log(spaceTrimmedWord);
       socket.emit("addWord", newWord);
       setNewWord("");
     }
   };
 
-  // Listen for new words from server
-  // useEffect(() => {
-  //   socket?.on("newWord", (word) => {
-  //     console.log(word);
-  //     setWords((curr) => {
-  //       console.log([...curr, word]);
-  //       return [...curr, word];
-  //     });
-  //   });
-  //   return () => {
-  //     socket?.off("newWord");
-  //   };
-  // }, [socket]);
-  //Including words in the dependency array of the useEffect hook above, means that the effect will be re-run every time words changes. This will create a new socket listener every time words changes, and the previous listener will be cleaned up by the return function of the previous effect.So, every time words changes, the previous listener will be removed, a new listener will be created, and the state will be updated with the new word received by the socket. If we don't include the 'words' array in the dependency array of the useEffect, the useEffect block will only run once, therefore the socket listener will be created once and the return statement remember that it clears on the second time, so this one will not run and the strange thing is the the socket listener will increase the listening instances each time a word(event) is emitted causing repeated words in the 'words' array, displaying repeated words in the page and causing the repeated key/child issue DOM problem
-
   // Listen for initial words from server
   useEffect(() => {
     socket.on("initialWords", (words) => {
       setWords(words);
-
-      //create an array with random values for fontFamily, color and rotation
-      // const colorArr = [];
-      // for (let i = 0; i < words.length; i++) {
-      //   const randColor = `hsl(${Math.floor(Math.random() * 359)}, 100%, 60%)`;
-      //   const randRot = Math.floor(Math.random() * 10);
-      //   const rotate = `rotate(${i % 2 === 0 ? -randRot : randRot}deg)`;
-      //   colorArr.push([randColor, fonts(), rotate]);
-      // }
-      // setFontColorRotate(colorArr);
     });
 
     return () => {
@@ -104,52 +65,46 @@ export default function Board() {
   const handleTheme = () => {
     if (light) {
       setLight(false);
-      document.documentElement.style.backgroundColor = "rgb(70, 64, 69)";
+      document.documentElement.style.backgroundColor = "#281b1b";
     } else {
       setLight(true);
       document.documentElement.style.backgroundColor = "rgb(172, 56, 164)";
     }
   };
-  //console.log(document.querySelector("#words")?.offsetWidth);
-  //console.log(document.querySelector("#words")?.offsetHeight);
+
   return (
     <div
       id="board"
       style={{
-        background: `${light ? "rgb(172, 56, 164)" : "rgb(70, 64, 69)"}`,
+        background: `${light ? "rgb(172, 56, 164)" : "#281b1b"}`,
       }}
     >
-      <h1
-        onClick={handleTheme}
-        style={{ fontFamily: "Nabla", cursor: "pointer" }}
-      >
-        BRAINCLOUD
-      </h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          style={{ background: `${light ? "rgb(233, 172, 229)" : "gray"}` }}
-          type="text"
-          value={newWord}
-          onChange={(event) => setNewWord(event.target.value.toUpperCase())}
-        />
-        {/* <button type="submit">Add Word</button> */}
-      </form>
-      <br />
-      <div id="words">
-        <Cloud words={words} />
-        {/* {words.map((word, ind) => (
-          <div
-            key={`${word._id}-${word.count}`}
+      <div id="canvas-top" ref={headRef}>
+        <h1
+          onClick={handleTheme}
+          style={{
+            fontFamily: "Nabla",
+            cursor: "pointer",
+          }}
+          className="non-select"
+        >
+          BRAINCLOUD
+        </h1>
+        <form onSubmit={handleSubmit}>
+          <input
+            className="input"
             style={{
-              fontFamily: `${fontColorRotate[ind][1]}`,
-              fontSize: `${1 + 0.6 * word.count}em`,
-              color: `${fontColorRotate[ind][0]}`,
-              transform: `${fontColorRotate[ind][2]}`,
+              background: `${light ? "rgb(233, 172, 229)" : "#2e1f03"}`,
             }}
-          >
-            {word.text}
-          </div>
-        ))} */}
+            type="text"
+            value={newWord}
+            onChange={(event) => setNewWord(event.target.value.toUpperCase())}
+          />
+        </form>
+      </div>
+
+      <div id="words">
+        <Cloud words={words} headHeight={headRef.current?.offsetHeight} />
       </div>
     </div>
   );

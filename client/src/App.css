@@ -10,13 +10,19 @@ html {
 h1 {
   font-size: 3.5vw;
 }
-input {
+.input {
   font-family: "Space Mono";
   font-size: 1em;
   font-weight: 400;
-  color: rgb(88, 47, 47);
+  color: rgb(214, 189, 121);
   border-style: none;
-  border: solid rgb(114, 52, 101) 1px;
+  border: solid rgb(255, 219, 99) 1px;
+  outline: none;
+}
+.non-select {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }
 #app {
   margin: 0;
@@ -42,28 +48,23 @@ input {
   height: 100vh;
   background: rgb(207, 161, 200);
 }
-input {
-  outline: none;
-}
 
 #board {
+  overflow: hidden;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   color: rgb(101, 248, 113);
 }
-#words {
-  display: grid;
+#canvas-top {
   width: 100vw;
-  grid-template-columns: min-content max-content auto;
-  grid-gap: 10px;
-  justify-content: center;
 }
 
 @media (orientation: portrait) {
   h1 {
     width: 100vw;
-    font-size: 15vw;
+    font-size: 5vw;
   }
   #words {
     display: flex;
