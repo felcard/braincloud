@@ -71,7 +71,6 @@ export default function Board() {
       document.documentElement.style.backgroundColor = "rgb(172, 56, 164)";
     }
   };
-
   return (
     <div
       id="board"
