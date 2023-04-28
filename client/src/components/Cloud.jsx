@@ -25,7 +25,9 @@ const Cloud = ({ words, headHeight = 0 }) => {
     //wrap logic in handleResize to resize canvas and words when window screen resizes
     const handleResize = () => {
       //use ratio between width and height as a modifier to better control font size when window changes
-      const spaceRatio = window.innerWidth / window.innerHeight;
+      const screenW = window.innerWidth;
+      const screenH = window.innerHeight;
+      const spaceRatio = (screenW * screenH) / 900000;
       const draw = (words) => {
         const layout = cloud()
           //canvas size
@@ -35,10 +37,20 @@ const Cloud = ({ words, headHeight = 0 }) => {
           .padding(5)
           //rotate with 50% chance is 3 degrees in both directions
           .rotate(() => (Math.random() < 0.5 ? -1 : 1) * 3)
-          //using algorithmic scale function to set the size ratio variation between words according to count number. The first number increases will make the word increase significantly while the more the count property grows the slow the increase to avoid words growing too big and getting off the screen
+          //using algorithmic scale function to set the size ratio variation between words according to count number. The first number increases will make the word increase significantly while the more the count property grows the slow the increase to avoid words growing too big and getting off the screen.
+          //Math.max ensures the font size is never lower than 8
+          //And when screen H is larger than screen W (mobiles) we increase the scaling multiplier to 25 to make words a bit larger on mobile screens
           .fontSize((d) =>
-            Math.max(Math.log(d.count + 1) * 20 * spaceRatio, 13)
+            Math.max(
+              Math.log(d.count + 1) *
+                `${screenW > screenH ? 18 : 25}` *
+                spaceRatio,
+              8
+            )
           )
+
+          //font size changes with screen but still words are a bit small on mobile and when there are many words, the larger ones still dissappear from screen
+
           .on("end", (words) => {
             //clear the canvas before each words render to avoid double rendering
             const svg = d3.select(svgRef.current);
