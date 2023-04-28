@@ -32,7 +32,12 @@ export default function Board() {
     socket.on("connect_error", (err) => {
       if (err.message) {
         console.log(err.message);
-        navigate("/session");
+        if (
+          err.message === "Token unavailable" ||
+          err.message === "invalid/expired token"
+        ) {
+          navigate("/session");
+        }
       } //react suggests using navigate() always inside a useEffect
       //console.log(err.message) log the error message to the console
     });
