@@ -25,3 +25,6 @@ module.exports = new Server(server, {
 // Extract token from Authorization header
 //const token = header.Authorization.split(' ')[1];
 //the client will send the token in the header for the initial handshake
+
+//////////////////NOTES////////////////////
+//Started this project using express and cors libraires but managed to realised after there was no need for any of them. Bare in mind at some point they may become necessary
