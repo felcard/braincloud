@@ -12,19 +12,7 @@ server.listen(PORT, () => {
 module.exports = new Server(server, {
     cors: {
         origin: "https://braincloud.netlify.app/",
-        //below we allow only auth headers and credentials since we are storing
-        //the token as a cookie in the client
+
         allowedHeaders: "Authorization", credentials: true
     }
 });
-
-//this info is for namespaces section not the listen file
-//is safer to send the token in the header since it is more secure:
-//socket.emit('token', { data: myData }, { Authorization: `Bearer ${token}` }); //note bearer is standard for sending tokens to the client
-//and in the client the token is extracted: socket.on('myMessage', (data, header) => {
-// Extract token from Authorization header
-//const token = header.Authorization.split(' ')[1];
-//the client will send the token in the header for the initial handshake
-
-//////////////////NOTES////////////////////
-//Started this project using express and cors libraires but managed to realised after there was no need for any of them. Bare in mind at some point they may become necessary
