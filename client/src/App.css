@@ -1,3 +1,9 @@
+@font-face {
+  font-family: "titulo";
+  src: url("./utils/GhostClouds.woff2") format("woff2");
+  /* Add additional font formats if available */
+  /* Specify font-weight and font-style if desired */
+}
 * {
   margin: 0px;
 }
@@ -8,7 +14,11 @@ html {
   background: rgb(70, 64, 69);
 }
 h1 {
-  font-size: 3.5vw;
+  margin-top: -0.1em;
+  font-size: 7vw;
+  line-height: 1em;
+  font-weight: lighter;
+  text-shadow: 0px 0px 6px rgb(255, 208, 0), 0px 0px 6px rgb(255, 196, 0);
 }
 .input {
   font-family: "Space Mono";
@@ -16,7 +26,7 @@ h1 {
   font-weight: 400;
   color: rgb(214, 189, 121);
   border-style: none;
-  border: solid rgb(255, 219, 99) 1px;
+  border: solid rgb(145, 124, 57) 1px;
   outline: none;
 }
 .non-select {
@@ -30,32 +40,13 @@ h1 {
   text-align: center;
 }
 
-#login {
-  margin: 0px;
-  width: 100vw;
-  height: 100vh;
-  background: rgb(221, 238, 158);
-}
-#admin {
-  margin: 0px;
-  width: 100vw;
-  height: 100vh;
-  background: rgb(158, 179, 238);
-}
-#session {
-  margin: 0px;
-  width: 100vw;
-  height: 100vh;
-  background: rgb(207, 161, 200);
-}
-
 #board {
   overflow: hidden;
   height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: rgb(101, 248, 113);
+  color: rgb(248, 238, 101);
 }
 #canvas-top {
   width: 100vw;
@@ -64,7 +55,8 @@ h1 {
 @media (orientation: portrait) {
   h1 {
     width: 100vw;
-    font-size: 5vw;
+    font-size: 18vw;
+    margin-bottom: 0.1em;
   }
   #words {
     display: flex;

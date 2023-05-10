@@ -43,7 +43,7 @@ const Cloud = ({ words, headHeight = 0 }) => {
           .fontSize((d) =>
             Math.max(
               Math.log(d.count + 1) *
-                `${screenW > screenH ? 18 : 25}` *
+                `${screenW > screenH ? 18 : 50}` *
                 spaceRatio,
               8
             )
