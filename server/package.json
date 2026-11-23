@@ -1,5 +1,5 @@
 {
-  "name": "brainstorm-be",
+  "name": "braincloud-server",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -9,9 +9,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/felcard/brainstorm-be.git"
+    "url": "git+https://github.com/felcard/braincloud.git",
+    "directory": "server"
   },
-  "homepage": "https://github.com/felcard/brainstorm-be#readme",
+  "homepage": "https://github.com/felcard/braincloud#readme",
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -25,5 +26,8 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
+  },
+  "bugs": {
+    "url": "https://github.com/felcard/braincloud/issues"
   }
 }
