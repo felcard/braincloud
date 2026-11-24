@@ -20,7 +20,7 @@ export default function RoomPage() {
     setWordJustSent(null); // switching the glow off first lets it restart for the same word
     glowTimer.current = setTimeout(() => {
       setWordJustSent(word);
-      glowTimer.current = setTimeout(() => setWordJustSent(null), 2000);
+      glowTimer.current = setTimeout(() => setWordJustSent(null), 1000); // matches the 1s glow in styles.css
     }, 50);
   };
 

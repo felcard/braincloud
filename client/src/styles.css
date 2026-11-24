@@ -181,13 +181,14 @@ a {
 
 /* The word you just sent glows briefly, so you can see your vote landed. */
 .word-cloud text.just-sent {
-  animation: just-sent-glow 2s ease-out;
+  animation: just-sent-glow 1s ease-out;
 }
 
+/* Same yellow glow as the BRAINCLOUD title */
 @keyframes just-sent-glow {
   0%,
   40% {
-    filter: drop-shadow(0 0 6px white) drop-shadow(0 0 12px white);
+    filter: drop-shadow(0 0 6px var(--glow)) drop-shadow(0 0 12px var(--glow));
   }
   100% {
     filter: none;
