@@ -20,7 +20,7 @@ export default function RoomPage() {
     setWordJustSent(null); // switching the flash off first lets it restart for the same word
     flashTimer.current = setTimeout(() => {
       setWordJustSent(word);
-      flashTimer.current = setTimeout(() => setWordJustSent(null), 1000); // matches the 1s flash in styles.css
+      flashTimer.current = setTimeout(() => setWordJustSent(null), 2000); // matches the 2s flash in styles.css
     }, 50);
   };
 

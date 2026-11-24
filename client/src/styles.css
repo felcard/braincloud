@@ -182,7 +182,7 @@ a {
 /* The word you just sent flashes the title's yellow, then fades back to its
    own colour, so you can see your vote landed. */
 .word-cloud text.just-sent {
-  animation: just-sent-flash 1s ease-out;
+  animation: just-sent-flash 2s ease-out; /* keep in step with the timer in RoomPage.jsx */
 }
 
 /* No end keyframe: it fades back to the word's own colour by itself. */
