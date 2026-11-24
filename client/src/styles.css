@@ -179,18 +179,16 @@ a {
   transition: transform 0.6s ease, font-size 0.6s ease;
 }
 
-/* The word you just sent glows briefly, so you can see your vote landed. */
+/* The word you just sent flashes the title's yellow, then fades back to its
+   own colour, so you can see your vote landed. */
 .word-cloud text.just-sent {
-  animation: just-sent-glow 1s ease-out;
+  animation: just-sent-flash 1s ease-out;
 }
 
-/* Same yellow glow as the BRAINCLOUD title */
-@keyframes just-sent-glow {
+/* No end keyframe: it fades back to the word's own colour by itself. */
+@keyframes just-sent-flash {
   0%,
-  40% {
-    filter: drop-shadow(0 0 6px var(--glow)) drop-shadow(0 0 12px var(--glow));
-  }
-  100% {
-    filter: none;
+  25% {
+    fill: var(--glow);
   }
 }

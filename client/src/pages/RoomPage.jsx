@@ -12,15 +12,15 @@ export default function RoomPage() {
   const [room, setRoom] = useState(null); // what the server says about the room
   const [isHost, setIsHost] = useState(false);
   const [error, setError] = useState('');
-  const [wordJustSent, setWordJustSent] = useState(null); // glows in the cloud for a moment
-  const glowTimer = useRef(null);
+  const [wordJustSent, setWordJustSent] = useState(null); // flashes yellow in the cloud for a moment
+  const flashTimer = useRef(null);
 
   const showWordJustSent = (word) => {
-    clearTimeout(glowTimer.current);
-    setWordJustSent(null); // switching the glow off first lets it restart for the same word
-    glowTimer.current = setTimeout(() => {
+    clearTimeout(flashTimer.current);
+    setWordJustSent(null); // switching the flash off first lets it restart for the same word
+    flashTimer.current = setTimeout(() => {
       setWordJustSent(word);
-      glowTimer.current = setTimeout(() => setWordJustSent(null), 1000); // matches the 1s glow in styles.css
+      flashTimer.current = setTimeout(() => setWordJustSent(null), 1000); // matches the 1s flash in styles.css
     }, 50);
   };
 
