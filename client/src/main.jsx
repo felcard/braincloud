@@ -8,7 +8,7 @@ createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<HomePage />} />
-      <Route path="/r/:roomId" element={<RoomPage />} />
+      <Route path="/room/:roomId" element={<RoomPage />} />
     </Routes>
   </BrowserRouter>
 );

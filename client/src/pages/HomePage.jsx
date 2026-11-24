@@ -15,7 +15,7 @@ export default function HomePage() {
     socket.emit('createRoom', options, (reply) => {
       if (reply.error) return setError(reply.error);
       saveHostKey(reply.roomId, reply.hostKey);
-      navigate(`/r/${reply.roomId}`);
+      navigate(`/room/${reply.roomId}`);
     });
   };
 

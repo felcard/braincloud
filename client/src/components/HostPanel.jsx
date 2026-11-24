@@ -16,7 +16,7 @@ export default function HostPanel({ room }) {
   const [showQrCode, setShowQrCode] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const shareLink = `${window.location.origin}/r/${room.id}`;
+  const shareLink = `${window.location.origin}/room/${room.id}`;
 
   const copyShareLink = async () => {
     await navigator.clipboard.writeText(shareLink);
