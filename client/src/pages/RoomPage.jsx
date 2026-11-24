@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Title from '../components/Title';
 import HostPanel from '../components/HostPanel';
@@ -12,6 +12,17 @@ export default function RoomPage() {
   const [room, setRoom] = useState(null); // what the server says about the room
   const [isHost, setIsHost] = useState(false);
   const [error, setError] = useState('');
+  const [wordJustSent, setWordJustSent] = useState(null); // glows in the cloud for a moment
+  const glowTimer = useRef(null);
+
+  const showWordJustSent = (word) => {
+    clearTimeout(glowTimer.current);
+    setWordJustSent(null); // switching the glow off first lets it restart for the same word
+    glowTimer.current = setTimeout(() => {
+      setWordJustSent(word);
+      glowTimer.current = setTimeout(() => setWordJustSent(null), 2000);
+    }, 50);
+  };
 
   useEffect(() => {
     const joinRoom = () => {
@@ -56,8 +67,8 @@ export default function RoomPage() {
       <Title small />
       {room.question && <h2 className="question">{room.question}</h2>}
       {isHost && <HostPanel room={room} />}
-      <WordForm room={room} />
-      <WordCloud words={room.words} />
+      <WordForm room={room} onWordSent={showWordJustSent} />
+      <WordCloud words={room.words} highlightedWord={wordJustSent} />
     </main>
   );
 }

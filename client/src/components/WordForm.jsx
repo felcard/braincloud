@@ -8,7 +8,7 @@ function describeWordsLeft(wordsLeft) {
 }
 
 // The box where everyone (host included) sends their words.
-export default function WordForm({ room }) {
+export default function WordForm({ room, onWordSent }) {
   const [word, setWord] = useState('');
   const [error, setError] = useState('');
 
@@ -26,6 +26,7 @@ export default function WordForm({ room }) {
     socket.emit('addWord', word, (reply) => {
       if (reply.error) return setError(reply.error);
       setWord('');
+      onWordSent(reply.word); // the word as the server stored it, e.g. "MACHINE LEARNING"
     });
   };
 

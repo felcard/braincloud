@@ -58,7 +58,7 @@ function layOutWords(words, width, height, onDone) {
   tryLayout();
 }
 
-export default function WordCloud({ words }) {
+export default function WordCloud({ words, highlightedWord }) {
   const boxRef = useRef(null);
   const [boxSize, setBoxSize] = useState({ width: 0, height: 0 });
   const [fontsReady, setFontsReady] = useState(false);
@@ -102,6 +102,7 @@ export default function WordCloud({ words }) {
           {placedWords.map((word) => (
             <text
               key={word.text}
+              className={word.text === highlightedWord ? 'just-sent' : undefined}
               textAnchor="middle"
               style={{
                 transform: `translate(${word.x}px, ${word.y}px) rotate(${word.rotate}deg)`,

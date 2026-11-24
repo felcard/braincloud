@@ -178,3 +178,18 @@ a {
 .word-cloud text {
   transition: transform 0.6s ease, font-size 0.6s ease;
 }
+
+/* The word you just sent glows briefly, so you can see your vote landed. */
+.word-cloud text.just-sent {
+  animation: just-sent-glow 2s ease-out;
+}
+
+@keyframes just-sent-glow {
+  0%,
+  40% {
+    filter: drop-shadow(0 0 6px white) drop-shadow(0 0 12px white);
+  }
+  100% {
+    filter: none;
+  }
+}
