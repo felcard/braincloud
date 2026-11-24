@@ -1,0 +1,180 @@
+@font-face {
+  font-family: 'GhostClouds';
+  src: url('./fonts/GhostClouds.woff2') format('woff2');
+}
+
+:root {
+  --background: #281b1b;
+  --text: rgb(248, 238, 101);
+  --glow: rgb(255, 208, 0);
+  --field: #2e1f03;
+  --field-text: rgb(214, 189, 121);
+  --border: rgb(145, 124, 57);
+  --muted: rgb(190, 170, 120);
+  --error: rgb(255, 120, 120);
+}
+
+body.pink-theme {
+  --background: rgb(172, 56, 164);
+  --field: rgb(233, 172, 229);
+  --field-text: rgb(70, 20, 70);
+  --border: rgb(110, 30, 105);
+  --muted: rgb(255, 225, 250);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  background: var(--background);
+  color: var(--text);
+  font-family: 'Space Mono', monospace;
+  text-align: center;
+}
+
+.title {
+  font-family: 'GhostClouds', sans-serif;
+  font-weight: lighter;
+  font-size: clamp(3rem, 9vw, 7rem);
+  line-height: 1.1;
+  text-shadow: 0 0 6px var(--glow), 0 0 6px var(--glow);
+  cursor: pointer;
+  user-select: none;
+}
+
+.title-small {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+}
+
+input,
+select,
+button {
+  font-family: 'Space Mono', monospace;
+  font-size: 1rem;
+  color: var(--field-text);
+  background: var(--field);
+  border: 1px solid var(--border);
+  padding: 0.5em 0.8em;
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+button:hover:not(:disabled) {
+  border-color: var(--text);
+  color: var(--text);
+}
+
+button:disabled,
+input:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+a {
+  color: var(--text);
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.error {
+  color: var(--error);
+  font-size: 0.9rem;
+}
+
+/* Home page */
+
+.home {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.create-room-form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  width: min(100%, 40rem);
+}
+
+.create-room-form input {
+  flex: 1 1 18rem;
+}
+
+/* Room page */
+
+.room {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem 0;
+}
+
+.question {
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+}
+
+.host-panel {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem;
+  border: 1px dashed var(--border);
+  max-width: 60rem;
+}
+
+.host-panel .question-input {
+  flex: 1 1 16rem;
+}
+
+.share-link {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.qr-code {
+  background: white;
+  padding: 0.75rem;
+}
+
+.word-form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.word-cloud {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+}
+
+.word-cloud svg {
+  display: block; /* inline SVGs leave a gap below them, which caused a scrollbar */
+}
+
+.word-cloud text {
+  transition: transform 0.6s ease, font-size 0.6s ease;
+}
